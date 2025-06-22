@@ -6,12 +6,14 @@ import pickle
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Modell und LabelEncoder laden
+# ---------------------------------------
+# Modell und LabelEncoder laden# trainiertes Hunderassen-Modell wird geladen
 model = load_model("hundemodell.h5")
+# LabelEncoder laden um numerische Vorhersagen in Rassennamen zu übersetzen
 with open("labelencoder.pkl", "rb") as f:
     le = pickle.load(f)
-
-# Bild vorbereiten: Bild laden, auf RGB setzen, Größe anpassen, Normalisierung
+    
+# bereitet hochgeladene Bilder für das Modell vor
 def preprocess_image(uploaded_file):
     img = Image.open(uploaded_file).convert("RGB")  # In RGB konvertieren
     img = img.resize((224, 224))                    # Größe an Model-Anforderung anpassen
@@ -25,13 +27,13 @@ st.title("🐶 Hunderassen-Erkenner")
 uploaded_file = st.file_uploader("📤 Lade ein Bild hoch", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    # Bild anzeigen
+    # zeigt das hochgeladene Bild
     st.image(uploaded_file, caption="📷 Hochgeladenes Bild", use_column_width=True)
 
     # Bild vorbereiten für das Modell
     img = preprocess_image(uploaded_file)
     
-    # Modell-Vorhersage (Wahrscheinlichkeiten für jede Klasse)
+    # Modell-Vorhersage starten (Wahrscheinlichkeiten für jede Klasse)
     prediction = model.predict(img)[0]  # [0], weil wir nur ein Bild haben, nicht Batch
     
     # Wahrscheinlichkeiten mit den Klassennamen aus LabelEncoder verknüpfen
@@ -42,20 +44,21 @@ if uploaded_file is not None:
     
     # Beste Vorhersage (erste Zeile, da sortiert)
     top_rasse = proba_df.iloc[0]
-
-    # Schwellenwert prüfen: mindestens 30% Wahrscheinlichkeit für "Hund erkannt"
+    
+    #Ergebnis Anzeige:
+    # Sicherheitsschwelle: nur anzeigen, wenn wahrscheinlich genug (>30 %)
     if top_rasse["Wahrscheinlichkeit (%)"] < 30:
         st.subheader("⚠️ Kein Hund erkannt (Wahrscheinlichkeit < 30%)")
     else:
         st.subheader(f"✅ Vorhergesagte Rasse: **{top_rasse['Rasse']}**")
         st.write(f"Mit einer Wahrscheinlichkeit von **{top_rasse['Wahrscheinlichkeit (%)']:.2f}%**")
 
-        # Kreisdiagramm der Top 5 Wahrscheinlichkeiten als Visualisierung
+        # Kreisdiagramm der Top 5 Rassen
         st.subheader("📊 Wahrscheinlichkeitsverteilung (Top 5)")
         top5 = proba_df.head(5)
         fig, ax = plt.subplots()
         ax.pie(top5["Wahrscheinlichkeit (%)"], labels=top5["Rasse"], autopct="%1.1f%%", startangle=90)
-        ax.axis("equal")  # Kreisförmig machen
+        ax.axis("equal")  # Kreisform sicherstellen
         st.pyplot(fig)
 
         # Optional: gesamte Wahrscheinlichkeitsverteilung als Tabelle anzeigen (ausklappbar)
