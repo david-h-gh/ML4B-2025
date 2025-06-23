@@ -1,0 +1,7 @@
+streamlit
+tensorflow==2.14.0
+pandas
+numpy
+pillow
+matplotlib
+scikit-learn
