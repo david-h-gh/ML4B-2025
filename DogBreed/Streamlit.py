@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 
 # ---------------------------------------
 # Modell und LabelEncoder laden# trainiertes Hunderassen-Modell wird geladen
-model = load_model("DogBreed/hundemodell.h5")
+model = load_model("hundemodell.h5")
 # LabelEncoder laden um numerische Vorhersagen in Rassennamen zu übersetzen
-with open("DogBreed/labelencoder.pkl", "rb") as f:
+with open("labelencoder.pkl", "rb") as f:
     le = pickle.load(f)
     
 # bereitet hochgeladene Bilder für das Modell vor
@@ -56,9 +56,17 @@ if uploaded_file is not None:
         # Kreisdiagramm der Top 5 Rassen
         st.subheader("📊 Wahrscheinlichkeitsverteilung (Top 5)")
         top5 = proba_df.head(5)
-        fig, ax = plt.subplots()
-        ax.pie(top5["Wahrscheinlichkeit (%)"], labels=top5["Rasse"], autopct="%1.1f%%", startangle=90)
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.pie(top5["Wahrscheinlichkeit (%)"], startangle=90)
         ax.axis("equal")  # Kreisform sicherstellen
+
+        # Legende hinzufügen
+        labels = [
+        f"{rasse} – {prozent:.1f}%" 
+        for rasse, prozent in zip(top5["Rasse"], top5["Wahrscheinlichkeit (%)"])
+        ]
+        ax.legend(labels, title="Rassen & Wahrscheinlichkeiten", loc="center left", bbox_to_anchor=(1, 0.5), fontsize=14)
+        plt.tight_layout()
         st.pyplot(fig)
 
         # Optional: gesamte Wahrscheinlichkeitsverteilung als Tabelle anzeigen (ausklappbar)
