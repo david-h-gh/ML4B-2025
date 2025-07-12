@@ -63,7 +63,7 @@ Bibiliothek:
 - sklearn
 
 Konzept der App:
-- User lädet Bild hoch und kriegt eine Einschätzung welche Hunderasse das Bild zeigt
+- User läd Bild hoch und kriegt eine Einschätzung welche Hunderasse das Bild zeigt
 - Außerdem Aufteilung der 5 wahrscheinlichsten Hunderassen, die das Bild zeigen könnte
 
 
