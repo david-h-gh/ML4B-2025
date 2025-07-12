@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 # ---------------------------------------
 # Modell und LabelEncoder laden# trainiertes Hunderassen-Modell wird geladen
-model = load_model("hundemodell.h5")
+model = load_model("DogBreed/hundemodell.h5")
 # LabelEncoder laden um numerische Vorhersagen in Rassennamen zu übersetzen
 with open("labelencoder.pkl", "rb") as f:
     le = pickle.load(f)
