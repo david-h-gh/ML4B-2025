@@ -28,7 +28,7 @@ uploaded_file = st.file_uploader("📤 Lade ein Bild hoch", type=["jpg", "jpeg",
 
 if uploaded_file is not None:
     # zeigt das hochgeladene Bild
-    st.image(uploaded_file, caption="📷 Hochgeladenes Bild", use_column_width=True)
+    st.image(uploaded_file, caption="📷 Hochgeladenes Bild", use_container_width=True)
 
     # Bild vorbereiten für das Modell
     img = preprocess_image(uploaded_file)
